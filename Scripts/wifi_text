@@ -1,0 +1,9 @@
+#!/bin/bash
+
+wifi_name_val=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
+
+if [[ "${wifi_name_val}" == "" ]] ; then
+    wifi_name_val+="None"
+fi
+
+printf "%s""${wifi_name_val}"

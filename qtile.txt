@@ -1,0 +1,31 @@
+yay -S qtile qtile-extras xorg-server xorg-xinit xorg-apps
+yay -S python-pip
+yay -S picom-jonaburg-git alacritty 
+yay -S google-chrome nitrogen visual-studio-code-bin neovim
+yay -S rofi pavucontrol
+yay -S htop ttf-jetbrains-mono nerd-fonts-complete spotify-launcher arandr
+
+yay -S brightnessctl
+yay -S pamixer
+yay -S dunst
+yay -S ssctl
+yay -S pamixer
+
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sudo chsh -s $(which zsh)
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+yay -S --noconfirm zsh-theme-powerlevel10k-git
+
+
+python3 -m pip install iwlib fontawesome black
+chmod +x ~/.config/qtile/autostart.sh
+cd .config/qtile/Scripts
+chmod +x bat_poll blue_text blue_menu bright_control first_startup power_menu vol_script volume_text wifi_menu wifi_text
+sudo systemctl start bluetooth.service
+sudo systemctl enable bluetooth.service
+
+curl -fLo ~.config/.vim/autoload/plug.vim --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+
+git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons

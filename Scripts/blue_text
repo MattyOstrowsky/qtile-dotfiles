@@ -1,0 +1,9 @@
+#!/bin/bash
+
+blue_name_val=$(bluetoothctl info | grep  "Name:" |cut -d' ' -f2-)
+
+if [[ "${blue_name_val}" == "" ]] ; then
+    blue_name_val+="None"
+fi
+
+printf "%s""${blue_name_val}"
