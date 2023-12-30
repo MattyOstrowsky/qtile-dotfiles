@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ $1 == "up" ]] ; then
+    brightnessctl s +2% > /dev/null 
+elif [[ $1 == "down" ]] ; then
+    brightnessctl s 2%- > /dev/null 
+fi
+
+# Get the current brightness value
+brightness_val=$(brightnessctl i | grep -i "Current Brightness" | sed 's/^.*(//' | sed 's/\%.*//')
+
+# Send the notification
+dunstify -r "9995" -h int:value:"${brightness_val}" -i "icons8-sun-48" -t 2000 "Brightness : ${brightness_val}"

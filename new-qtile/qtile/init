@@ -1,0 +1,9 @@
+#!/bin/bash
+
+picom &
+dunst & 
+nitrogen --restore & 
+eww daemon --config "$HOME/.config/eww/menu" &
+nm-applet &
+blueman-applet &
+exit
