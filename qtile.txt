@@ -35,6 +35,7 @@ echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf
 --------------------------------------------------
 ------------------ NEW QTILE ---------------------
 --------------------------------------------------
+EndeavourOS + Gnome
 
 sudo systemctl start bluetooth.service
 sudo systemctl enable bluetooth.service
