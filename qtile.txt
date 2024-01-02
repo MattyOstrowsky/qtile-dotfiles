@@ -50,7 +50,8 @@ yay -S rofi pavucontrol
 yay -S neofetch
 yay -S network-manager-applet blueman
 yay -S lxappearance grub-customizer
-
+yay -S nvidia-inst
+nvidia-inst
 
 yay -S zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
