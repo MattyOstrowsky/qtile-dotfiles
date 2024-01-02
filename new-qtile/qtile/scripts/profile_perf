@@ -1,0 +1,31 @@
+#!/bin/bash
+
+profile=$(powerprofilesctl list | grep -oP '\*\s*\K\S+' | sed 's/.$//')
+
+set_level() {
+    list_profiles=("power-saver" "balanced" "performance")
+    index=-1
+
+    for ((i=0; i<${#list_profiles[@]}; i++)); do
+        if [ "${list_profiles[i]}" = "$profile" ]; then
+            index=$i
+            break
+        fi
+    done
+
+    if [ "$1" = "set" ]; then
+        if [ "$index" -ge 0 ] && [ "$index" -lt $((${#list_profiles[@]} - 1)) ]; then
+            new_profile="${list_profiles[index + 1]}"
+        else
+            new_profile="${list_profiles[0]}"
+        fi
+
+        echo "Setting profile to $new_profile"
+        powerprofilesctl set "$new_profile"
+        exit
+    else
+        echo "$profile"
+    fi
+}
+
+set_level "$1"

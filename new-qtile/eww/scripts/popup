@@ -1,4 +1,5 @@
 #!/bin/bash
 
 window="$1"
-eww open "$window" --toggle --config "$HOME/.config/eww/$window"
+screen=$2
+eww open "$window" --toggle --config "$HOME/.config/eww/$window" --screen $screen

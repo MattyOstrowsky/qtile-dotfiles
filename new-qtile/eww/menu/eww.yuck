@@ -6,11 +6,10 @@
 (defpoll temp :interval "5s" "../scripts/temp")
 
 (defwindow menu
-           :monitor 0
-           :geometry (geometry :x "15px"
-                               :y "1%"
-                               :width "20%"
-                               :height "60%"
+           :geometry (geometry :x "-5px"
+                               :y "40px"
+                               :width "450px"
+                               :height "700px"
                                :anchor "top right")
            :stacking "overlay"
            :exclusive false

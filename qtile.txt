@@ -29,6 +29,7 @@ curl -fLo ~.config/.vim/autoload/plug.vim --create-dirs \
 
 
 git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
+echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf
 --------------------------------------------------
 sudo systemctl start bluetooth.service
 sudo systemctl enable bluetooth.service
@@ -38,11 +39,13 @@ yay -S btop kitty eww-git
 yay -S picom-ftlabs-git
 yay -S qtile qtile-extras 
 yay -S python-pip
-yay -S pamixer
+yay -S pamixer arandr
 yay -S dunst visual-studio-code-bin 
 yay -S rofi pavucontrol
 yay -S neofetch
 yay -S network-manager-applet blueman
+yay -S lxappearance
+
 
 yay -S zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -51,3 +54,7 @@ git clone https://github.com/joshskidmore/zsh-fzf-history-search ${ZSH_CUSTOM:=~
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 yay -S starship
 chsh -s $(which zsh)
+
+
+yay -S ranger
+git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons

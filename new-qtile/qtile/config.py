@@ -16,8 +16,8 @@ groups = [
         spawn="google-chrome-stable",
         matches=[Match(wm_class="google-chrome")],
     ),
-    Group("3", label=fa.icons["terminal"], spawn=terminal),
-    Group("4", label=fa.icons["code"], spawn="code", matches=[Match(wm_class="code")]),
+    Group("3", label=fa.icons["terminal"]),
+    Group("4", label=fa.icons["code"], spawn="code"),
     Group("5", label=fa.icons["cog"]),
     Group("6", label=fa.icons["folder"]),
     Group(
@@ -46,7 +46,7 @@ for keynames, group in zip(keynames, groups):
 layouts = [
     layout.Columns(
         border_focus=colors_cappuccino["Green"],
-        border_normal=colors_cappuccino["Base"],
+        border_normal=colors_cappuccino["Lavender"],
         border_width=2,
         margin=14,
         border_on_single=True,
@@ -56,7 +56,7 @@ layouts = [
     layout.Stack(
         num_stacks=2,
         border_focus=colors_cappuccino["Green"],
-        border_normal=colors_cappuccino["Base"],
+        border_normal=colors_cappuccino["Lavender"],
         border_width=2,
         margin=14,
     ),
@@ -67,7 +67,7 @@ layouts = [
     # layout.RatioTile(),
     layout.Tile(
         border_focus=colors_cappuccino["Green"],
-        border_normal=colors_cappuccino["Base"],
+        border_normal=colors_cappuccino["Lavender"],
         border_width=2,
         margin=14,
     ),
@@ -77,8 +77,8 @@ layouts = [
 
 
 screens = [
-    Screen(top=def_bar([str(i) for i in range(1, 5)])),
-    Screen(top=sec_bar([str(i) for i in range(5, 9)])),
+    Screen(top=def_bar()),
+    Screen(top=sec_bar()),
 ]
 
 # Drag floating layouts.
@@ -112,12 +112,14 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(wm_class="gnome-disks"),  # Gnome Disk Utility
-        Match(wm_class="yad"),  # YAD
+        Match(wm_class="arandr"),
+        Match(wm_class="pavucontrol"),
+        Match(wm_class="yad"),# YAD
         Match(title="k_floats")  # kitty
     ],
-    border_focus=colors_cappuccino["Lavender"],
+    border_focus=colors_cappuccino["Blue"],
     border_width=2,
-    border_normal=colors_cappuccino["Base"],
+    border_normal=colors_cappuccino["Lavender"],
 )
 
 
