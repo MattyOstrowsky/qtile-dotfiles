@@ -44,7 +44,7 @@ yay -S dunst visual-studio-code-bin
 yay -S rofi pavucontrol
 yay -S neofetch
 yay -S network-manager-applet blueman
-yay -S lxappearance
+yay -S lxappearance grub-customizer
 
 
 yay -S zsh
