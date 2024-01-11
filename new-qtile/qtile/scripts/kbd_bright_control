@@ -1,0 +1,30 @@
+#!/bin/bash
+
+get_current_profile() {
+    brightnessctl --device='asus::kbd_backlight' g
+}
+
+get_max_profile() {
+    brightnessctl --device='asus::kbd_backlight' m
+}
+
+set_level() {
+    local profile=$(get_current_profile)
+    local max_profile=$(get_max_profile)
+
+    if [ "$1" = "set" ]; then
+        if ((profile >= 0 && profile < max_profile)); then
+            new_profile=$((profile + 1))
+        else
+            new_profile=0
+        fi
+
+        echo "Setting profile to $new_profile"
+        brightnessctl --device='asus::kbd_backlight' set "$new_profile"
+        exit
+    else
+        echo "$profile"
+    fi
+}
+
+set_level "$1"

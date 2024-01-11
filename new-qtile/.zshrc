@@ -1,6 +1,7 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export ZSH="$HOME/.oh-my-zsh"
 export PATH=$PATH:/usr/local/go/bin
+export PATH=/home/mat/.local/bin:$PATH
 
 ZSH_THEME="robbyrussell"
 

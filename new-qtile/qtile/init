@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# autorandr --change &
 picom &
 dunst & 
 nitrogen --restore & 
 eww daemon --config "$HOME/.config/eww/menu" &
 nm-applet &
-blueman-applet &
+blueman-applet & 
+optimus-manager-qt &
+rclone mount mygoogledrive: ~/drive/ &
 exit

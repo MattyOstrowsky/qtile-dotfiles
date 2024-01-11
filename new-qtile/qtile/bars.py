@@ -1,6 +1,6 @@
 from libqtile import bar
 from qtile_extras import widget
-from qtile_extras.widget.decorations import PowerLineDecoration
+from qtile_extras.widget.decorations import PowerLineDecoration, RectDecoration
 from defaults import *
 import os
 import subprocess
@@ -11,17 +11,15 @@ import fontawesome as fa
 widget_defaults = dict(
     foreground=colors_cappuccino["Text"],
     font=font_bold,
-    fontsize=12,
-    padding=3,
+    fontsize=12,padding=4
 )
 extension_defaults = widget_defaults.copy()
 
 
-def spacer_vert():
+def spacer_vert(decor: dict={}):
     return widget.TextBox(
         "|",
-        background=colors_cappuccino["Base"],
-        foreground=colors_cappuccino["Overlay2"],
+        foreground=colors_cappuccino["Overlay2"], **decor
     )
 
 
@@ -36,14 +34,6 @@ def parse_name(text):
         return "Hey Booy!"
 
 
-def right_rounded():
-    right = {
-        "decorations": [
-            PowerLineDecoration(path="rounded_right", size=8, shift=25, filled=True)
-        ]
-    }
-    return widget.TextBox(background=colors_cappuccino["Crust"], **right)
-
 
 def decode_profile():
     text = subprocess.check_output(
@@ -51,23 +41,31 @@ def decode_profile():
     )
     return str(text)[2:-3]
 
+def get_kbd_bright():
+    text = subprocess.check_output(
+        os.path.expanduser("~/.config/qtile/scripts/kbd_bright_control"),
+    )
+    return "     "+str(text)[2:-3]
 
-def left_rounded():
-    left = {"decorations": [PowerLineDecoration(path="rounded_left", size=8, shift=12)]}
-    return widget.TextBox(background=colors_cappuccino["Base"], **left)
-
+decor_inter = {
+    "decorations": [
+        RectDecoration(colour=colors_cappuccino["Base"], radius=12, filled=True,padding_y=4)
+    ]
+}
+decor_group = {
+    "decorations": [
+        RectDecoration(colour=colors_cappuccino["Base"], radius=12, filled=True,padding_y=4, padding_x=4, group=True)
+    ]
+}
 
 def def_bar():
     return bar.Bar(
         [
-            right_rounded(),
             widget.TextBox(
-                " ",
+                "   ",
                 mouse_callbacks={"Button1": lazy.spawn("rofi -show drun")},
-                padding=5,
                 fontsize=16,
-                background=colors_cappuccino["Base"],
-                foreground=colors_cappuccino["Sapphire"],
+                foreground=colors_cappuccino["Sapphire"],**decor_inter
             ),
             spacer_vert(),
             widget.GroupBox(
@@ -76,10 +74,8 @@ def def_bar():
                 this_current_screen_border=colors_cappuccino["Green"],
                 disable_drag=False,
                 fontsize=14,
-                background=colors_cappuccino["Base"],
-                inactive=colors_cappuccino["Subtext0"],
+                inactive=colors_cappuccino["Subtext0"],**decor_inter
             ),
-            left_rounded(),
             widget.WindowName(
                 background=colors_cappuccino["Crust"],
                 foreground=colors_cappuccino["Overlay0"],
@@ -88,89 +84,92 @@ def def_bar():
                 width=140,
             ),
             widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-            right_rounded(),
             widget.Clock(
-                format=f" %d %a", fontsize=12, background=colors_cappuccino["Base"]
+                format=f"   %d %a", fontsize=12, **decor_group
             ),
             widget.TextBox(
                 fa.icons["clock"],
                 fontsize=14,
                 padding=5,
-                background=colors_cappuccino["Base"],
+                **decor_group
             ),
             widget.Clock(
-                format=f" %H:%M %p ", fontsize=12, background=colors_cappuccino["Base"]
+                format=f" %H:%M %p   ", fontsize=12, **decor_group
             ),
-            left_rounded(),
             widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
             widget.Systray(background=colors_cappuccino["Crust"]),
-            right_rounded(),
+            widget.GenPollText(
+                **decor_group,
+                update_interval=1,
+                func=get_kbd_bright,
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (
+                            os.path.expanduser(
+                                "~/.config/qtile/scripts/kbd_bright_control set"
+                            )
+                        )
+                    )
+                },
+            ),
+            spacer_vert(decor_group),
             widget.Backlight(
+                fmt="  {}",
                 backlight_name="intel_backlight",
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 mouse_callbacks={"Button1": lazy.spawn("arandr")},
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.Volume(
-                fmt="  {}",
-                background=colors_cappuccino["Base"],
+                fmt="  {}   ",
+                **decor_group,
                 mouse_callbacks={"Button1": lazy.spawn("pavucontrol")},
             ),
-            left_rounded(),
             widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
-            right_rounded(),
             widget.CPU(
-                format="{load_percent:>4}%",
+                 font="Ubuntu Mono Bold",
+                format="  {load_percent:5.1f}%",
                 foreground=colors_cappuccino["Green"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.Memory(
                 format="{MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
                 measure_mem="G",
                 foreground=colors_cappuccino["Blue"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.ThermalSensor(
                 format="CPU {temp}°C",
                 foreground=colors_cappuccino["Peach"],
                 foreground_alert=colors_cappuccino["Red"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 threshold=80.0,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.NvidiaSensors(
-                format="GPU {temp}°C",
-                background=colors_cappuccino["Base"],
+                format="GPU {temp}°C   ",
+                **decor_group,
                 foreground=colors_cappuccino["Mauve"],
             ),
-            spacer_vert(),
-            widget.Battery(
-                background=colors_cappuccino["Base"],
-                format="{watt:.2f}W",
-                update_interval=1,
-                foreground=colors_cappuccino["Pink"],
-            ),
-            left_rounded(),
             widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
-            right_rounded(),
             widget.CheckUpdates(
                 foreground=colors_gruvbox["red"],
                 distro="Arch_checkupdates",
-                display_format="  {updates}",
+                display_format="    {updates}",
                 colour_have_updates=colors_cappuccino["Red"],
                 colour_no_updates=colors_cappuccino["Green"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats yay")},
-                no_update_string=" ",
-                background=colors_cappuccino["Base"],
+                no_update_string="   ",
+                **decor_group,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.GenPollText(
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 padding=5,
                 update_interval=1,
                 func=decode_profile,
@@ -180,18 +179,18 @@ def def_bar():
                     )
                 },
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.Battery(
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 charge_char="󰂄",
                 discharge_char="",
                 unknown_char="",
                 format="{char} {percent:2.0%}",
                 update_interval=5,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.TextBox(
-                fa.icons["power-off"],
+                fmt="⏻  ",
                 mouse_callbacks={
                     "Button1": lazy.spawn(
                         (os.path.expanduser("~/.config/eww/scripts/popup menu 0"))
@@ -199,12 +198,10 @@ def def_bar():
                 },
                 foreground=colors_cappuccino["Teal"],
                 fontsize=16,
-                background=colors_cappuccino["Base"],
-                padding=6,
+                **decor_group,
             ),
-            left_rounded(),
         ],
-        30,
+        36,
         background=colors_cappuccino["Crust"],
         margin=[4, 4, 4, 4],
     )
@@ -213,14 +210,11 @@ def def_bar():
 def sec_bar():
     return bar.Bar(
         [
-            right_rounded(),
             widget.TextBox(
-                " ",
+                "   ",
                 mouse_callbacks={"Button1": lazy.spawn("rofi -show drun")},
-                padding=5,
                 fontsize=16,
-                background=colors_cappuccino["Base"],
-                foreground=colors_cappuccino["Sapphire"],
+                foreground=colors_cappuccino["Sapphire"],**decor_inter
             ),
             spacer_vert(),
             widget.GroupBox(
@@ -229,10 +223,8 @@ def sec_bar():
                 this_current_screen_border=colors_cappuccino["Green"],
                 disable_drag=False,
                 fontsize=14,
-                background=colors_cappuccino["Base"],
-                inactive=colors_cappuccino["Subtext0"],
+                inactive=colors_cappuccino["Subtext0"],**decor_inter
             ),
-            left_rounded(),
             widget.WindowName(
                 background=colors_cappuccino["Crust"],
                 foreground=colors_cappuccino["Overlay0"],
@@ -241,99 +233,113 @@ def sec_bar():
                 width=140,
             ),
             widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-            right_rounded(),
-            widget.Clock(
-                format=f" %d %a", fontsize=12, background=colors_cappuccino["Base"]
+                        widget.Clock(
+                format=f"   %d %a", fontsize=12, **decor_group
             ),
             widget.TextBox(
                 fa.icons["clock"],
                 fontsize=14,
                 padding=5,
-                background=colors_cappuccino["Base"],
+                **decor_group
             ),
             widget.Clock(
-                format=f" %H:%M %p ", fontsize=12, background=colors_cappuccino["Base"]
+                format=f" %H:%M %p   ", fontsize=12, **decor_group
             ),
-            left_rounded(),
             widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-            right_rounded(),
+            widget.GenPollText(
+                **decor_group,
+                update_interval=1,
+                func=get_kbd_bright,
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (
+                            os.path.expanduser(
+                                "~/.config/qtile/scripts/kbd_bright_control set"
+                            )
+                        )
+                    )
+                },
+            ),
+            spacer_vert(decor_group),
             widget.Backlight(
+                fmt="  {}",
                 backlight_name="intel_backlight",
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 mouse_callbacks={"Button1": lazy.spawn("arandr")},
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.Volume(
-                fmt="  {}",
-                background=colors_cappuccino["Base"],
+                fmt="  {}   ",
+                **decor_group,
                 mouse_callbacks={"Button1": lazy.spawn("pavucontrol")},
             ),
-            left_rounded(),
             widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
-            right_rounded(),
             widget.CPU(
-                format="{load_percent:>4}%",
+                 font="Ubuntu Mono Bold",
+                format="  {load_percent:5.1f}%",
                 foreground=colors_cappuccino["Green"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.Memory(
                 format="{MemUsed:.1f}{mm}/{MemTotal:.1f}{mm}",
                 measure_mem="G",
                 foreground=colors_cappuccino["Blue"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.ThermalSensor(
                 format="CPU {temp}°C",
                 foreground=colors_cappuccino["Peach"],
                 foreground_alert=colors_cappuccino["Red"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 threshold=80.0,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.NvidiaSensors(
-                format="GPU {temp}°C",
-                background=colors_cappuccino["Base"],
+                format="GPU {temp}°C   ",
+                **decor_group,
                 foreground=colors_cappuccino["Mauve"],
             ),
-            spacer_vert(),
-            widget.Battery(
-                background=colors_cappuccino["Base"],
-                format="{watt:.2f}W",
-                update_interval=1,
-                foreground=colors_cappuccino["Pink"],
-            ),
-            left_rounded(),
             widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
-            right_rounded(),
+            widget.Spacer(length=10, background=colors_cappuccino["Crust"],**decor_group ),
+            widget.GenPollText(
+                **decor_group,
+                padding=5,
+                update_interval=1,
+                func=decode_profile,
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/qtile/scripts/profile_perf set"))
+                    )
+                },
+            ),
+            spacer_vert(decor_group),
             widget.Battery(
-                background=colors_cappuccino["Base"],
+                **decor_group,
                 charge_char="󰂄",
                 discharge_char="",
                 unknown_char="",
                 format="{char} {percent:2.0%}",
                 update_interval=5,
             ),
-            spacer_vert(),
+            spacer_vert(decor_group),
             widget.TextBox(
-                fa.icons["power-off"],
+                fmt="⏻  ",
                 mouse_callbacks={
                     "Button1": lazy.spawn(
-                        (os.path.expanduser("~/.config/eww/scripts/popup menu 1"))
+                        (os.path.expanduser("~/.config/eww/scripts/popup menu 0"))
                     )
                 },
                 foreground=colors_cappuccino["Teal"],
                 fontsize=16,
-                background=colors_cappuccino["Base"],
-                padding=6,
+                **decor_group,
             ),
-            left_rounded(),
         ],
-        30,
+        36,
         background=colors_cappuccino["Crust"],
         margin=[4, 4, 4, 4],
     )

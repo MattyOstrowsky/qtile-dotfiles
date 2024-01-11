@@ -1,0 +1,6 @@
+[kubernetes]
+disabled = false
+
+[docker_context]
+format = 'via [🐋 $context](blue bold)'
+disabled = false
