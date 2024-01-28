@@ -3,175 +3,238 @@
 (deflisten user :initial "Hello" "bash ~/.config/eww/scripts/user")
 (deflisten uptime :initial "?" "bash ~/.config/eww/scripts/uptime")
 
-(defpoll temp :interval "5s" "../scripts/temp")
+(defpoll master :interval "1s"
+"bash ~/.config/eww/scripts/get_vol master")
+
+(defpoll micro :interval "1s"
+"bash ~/.config/eww/scripts/get_vol capture")
+
+(defpoll brightness :interval "1s"
+"bash ~/.config/eww/scripts/brightness monitor")
+
+(defpoll brightness_kbd :interval "1s"
+"bash ~/.config/eww/scripts/brightness kbd")
+
 
 (defwindow menu
-           :geometry (geometry :x "-5px"
-                               :y "40px"
-                               :width "450px"
-                               :height "700px"
-                               :anchor "top right")
-           :stacking "overlay"
-           :exclusive false
-    (container)
+  :monitor 0
+  :geometry
+  (
+    geometry
+    :x "-5px"
+    :y "45px"
+    :width "450px"
+    :height "700px"
+    :anchor "top right"
+  )
+  :stacking "overlay"
+  :exclusive false
+  (container)
 )
 
-(
-    defwidget container [] 
+(defwidget container []
+  (
+    eventbox
+    :onhoverlost "../scripts/popup menu"
     (
-        eventbox    :timeout "2000ms"
-                    :onhoverlost "../scripts/popup menu"
-        (
-            box :class "container"
-                :orientation "v"
-                :space-evenly "false"
-                :spacing 10
-            (
-                power   :var powerrel
-                        :varname "powerrel"
-            )
-            (profile)
-            (system)
-        )
+      box
+      :class "container"
+      :orientation "v"
+      :space-evenly "false"
+      :spacing 10
+      (
+        power
+        :var powerrel
+        :varname "powerrel"
+      )
+      (profile)
+      (brightness)
+      (vol)
     )
-)
-
-(
-  defwidget profile [] 
-   (
-        box   :class "profile" 
-                :halign "center"
-                :space-evenly "false"
-                :spacing 15
-        (
-            box :class "face"
-                :style "background-image: url('${IMAGEP}');"
-        )
-        (box    :class "vertprofile"
-                :orientation "v"
-                :spacing 10
-                :space-evenly "false"
-            (
-                label   :text "${user}"
-                        :class "user-lb"
-            )
-            (
-                label   :text "${uptime}"
-                        :class "uptime-lb"
-            )  
-        )
-      
   )
 )
 
-(
-    defwidget power [var varname] 
+(defwidget profile []
+  (
+    box
+    :class "profile"
+    :halign "center"
+    :space-evenly "false"
+    :spacing 15
     (
-        box		:space-evenly "false" 	 
-                :class "power"
-                :halign "end"
-        (
-            eventbox	:onhover "eww update ${varname}=true --config ~/.config/eww/menu"	
-                        :onhoverlost "eww update ${varname}=false --config ~/.config/eww/menu" 
-            (
-                box		:space-evenly "false" 	 
-                        :class "power-container"
-                (
-                    revealer	:transition "slideright"				
-                                :reveal var			 
-                                :duration "550ms"
-                    (
-                        box	:space-evenly "false"
-                            :spacing 10
-                            :class "rev-box"
-                        (
-                            button	:class "item-btn" 					 
-                                    :onclick "bash ~/.config/eww/scripts/sys power"
-                            "⏻  Power off"
-                        )
-                        (
-                            button	:class "item-btn" 					 
-                                    :onclick "bash ~/.config/eww/scripts/sys reboot"
-                            "  Reboot"
-                        )
-                        (
-                            button	:class "item-btn" 					 
-                                    :onclick "bash ~/.config/eww/scripts/sys logout"
-                            "󰍃  Logout"
-                        )
-                    )
-                )
-                (
-                    button	:class "power-btn" 					 
-                            :onclick "shootdown"
-                    "⏻ "
-                )
-            )
-        )
+      box
+      :class "face"
+      :style "background-image: url('${IMAGEP}');"
     )
+    (
+      box
+      :class "vertprofile"
+      :orientation "v"
+      :spacing 10
+      :space-evenly "false"
+      
+      (
+        label
+        :text "${user}"
+        :class "user-lb"
+      )
+      (
+        label
+        :text "Up ${uptime}"
+        :class "uptime-lb"
+      )
+    )
+  )
 )
 
-(defwidget system_progress [data icon css tip] 
-  (box 
-    :class "progress" :spacing 16
-    (circular-progress
-      :class css
-      :value data
-      :thickness 6
-      :tooltip tip
-      (overlay
-        :valign "center"
-        (label 
-          :class "icon" 
-          :text icon
+(defwidget power [var varname]
+  (
+    box
+    :space-evenly "false"
+    :class "power"
+    :halign "end"
+    (
+      eventbox
+      :onhover "eww update ${varname}=true --config ~/.config/eww/menu"
+      :onhoverlost "eww update ${varname}=false --config ~/.config/eww/menu"
+      (
+        box
+        :space-evenly "false"
+        :class "power-container"
+        (
+          revealer
+          :transition "slideright"
+          :reveal var
+          :duration "550ms"
+          (
+            box
+            :space-evenly "false"
+            :spacing 10
+            :class "rev-box"
+            (
+              button
+              :class "item-btn"
+              :onclick "bash ~/.config/eww/scripts/sys power"
+              "⏻  Power off"
+            )
+            (
+              button
+              :class "item-btn"
+              :onclick "bash ~/.config/eww/scripts/sys reboot"
+              "  Reboot"
+            )
+            (
+              button
+              :class "item-btn"
+              :onclick "bash ~/.config/eww/scripts/sys logout"
+              "󰍃  Logout"
+            )
+          )
+        )
+        (
+          button
+          :class "power-btn"
+          :onclick "shootdown"
+          "⏻ "
         )
       )
     )
   )
 )
 
-(defwidget cpu [] 
-  (system_progress
-    :css "cpu"
-    :tip "CPU ${round(EWW_CPU.avg,0)}%"
-    :data {round(EWW_CPU.avg, 0)} 
-    :icon ""
+(defwidget vol []
+  (
+    box
+    :orientation "v"
+    :class "control-container"
+    (
+      label
+      :text "Audio"
+      :class "label"
+    )
+    (
+      scale_template
+      :label "  "
+      :value master
+      :onchange "amixer -D pulse sset Master {}%"
+    )
+    (
+      scale_template
+      :label "  "
+      :value micro
+      :onchange "amixer -D pulse sset Capture {}%"
+    )
   )
 )
 
-(defwidget ram [] 
-  (system_progress
-    :css "ram"
-    :tip "RAM ${round(EWW_RAM.used_mem / 8128, 2)}MB"
-    :data {round(EWW_RAM.used_mem_perc, 0)}
-    :icon ""
+(defwidget brightness []
+  (
+    box
+    :orientation "v"
+    :class "control-container"
+    (
+      label
+      :text "Brightness"
+      :class "label"
+    )
+    (
+      scale_template
+      :label "  "
+      :value brightness
+      :onchange "brightnessctl set {}%"
+    )
+    (
+      scale_kbd
+      :label "  "
+      :value brightness_kbd
+      :onchange "brightnessctl --device='asus::kbd_backlight' set {}"
+    )
   )
 )
 
-(defwidget disk [] 
-  (system_progress
-    :css "disk"
-    :tip "SSD ${round(EWW_DISK["/"].used_perc, 2)}%"
-    :data {round(EWW_DISK["/"].used_perc, 0)}
-    :icon ""
+(defwidget scale_template [label value onchange]
+  (
+    box
+    :orientation "h"
+    :class "metric"
+    :space-evenly false
+    :halign "center"
+    (
+      box
+      :class "label"
+      label
+    )
+    (
+      scale
+      :min 0
+      :max 101
+      :active {onchange != ""}
+      :value value
+      :onchange onchange
+    )
   )
 )
 
-(defwidget temp [] 
-  (system_progress
-    :css "temp"
-    :tip "Cpu temperature ${temp}°C"
-    :data temp
-    :icon ""
+(defwidget scale_kbd [label value onchange]
+  (
+    box
+    :orientation "h"
+    :class "metric"
+    :space-evenly false
+    :halign "center"
+    (
+      box
+      :class "label"
+      label
+    )
+    (
+      scale
+      :min 0
+      :max 4
+      :active {onchange != ""}
+      :value value
+      :onchange onchange
+    )
   )
 )
 
-(defwidget system []
-  (box 
-    :class "system"
-    (cpu)
-    (ram)
-    (disk)
-    (temp)
-  )
-)

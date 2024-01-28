@@ -9,18 +9,13 @@ import fontawesome as fa
 
 
 widget_defaults = dict(
-    foreground=colors_cappuccino["Text"],
-    font=font_bold,
-    fontsize=12,padding=4
+    foreground=colors_cappuccino["Text"], font=font_bold, fontsize=12, padding=4
 )
 extension_defaults = widget_defaults.copy()
 
 
-def spacer_vert(decor: dict={}):
-    return widget.TextBox(
-        "|",
-        foreground=colors_cappuccino["Overlay2"], **decor
-    )
+def spacer_vert(decor: dict = {}):
+    return widget.TextBox("|", foreground=colors_cappuccino["Overlay2"], **decor)
 
 
 def parse_name(text):
@@ -34,38 +29,51 @@ def parse_name(text):
         return "Hey Booy!"
 
 
-
 def decode_profile():
     text = subprocess.check_output(
         os.path.expanduser("~/.config/qtile/scripts/profile_perf"),
     )
     return str(text)[2:-3]
 
+
 def get_kbd_bright():
     text = subprocess.check_output(
         os.path.expanduser("~/.config/qtile/scripts/kbd_bright_control"),
     )
-    return "     "+str(text)[2:-3]
+    return "     " + str(text)[2:-3]
+
 
 decor_inter = {
     "decorations": [
-        RectDecoration(colour=colors_cappuccino["Base"], radius=12, filled=True,padding_y=4)
+        RectDecoration(
+            colour=colors_cappuccino["Base"], radius=12, filled=True, padding_y=4
+        )
     ]
 }
 decor_group = {
     "decorations": [
-        RectDecoration(colour=colors_cappuccino["Base"], radius=12, filled=True,padding_y=4, padding_x=4, group=True)
+        RectDecoration(
+            colour=colors_cappuccino["Base"],
+            radius=12,
+            filled=True,
+            padding_y=4,
+            padding_x=4,
+            group=True,
+        )
     ]
 }
+
 
 def def_bar():
     return bar.Bar(
         [
+            widget.Spacer(length=5, background=colors_cappuccino["Mantle"]),
             widget.TextBox(
                 "   ",
                 mouse_callbacks={"Button1": lazy.spawn("rofi -show drun")},
                 fontsize=16,
-                foreground=colors_cappuccino["Sapphire"],**decor_inter
+                foreground=colors_cappuccino["Sapphire"],
+                **decor_inter,
             ),
             spacer_vert(),
             widget.GroupBox(
@@ -74,60 +82,53 @@ def def_bar():
                 this_current_screen_border=colors_cappuccino["Green"],
                 disable_drag=False,
                 fontsize=14,
-                inactive=colors_cappuccino["Subtext0"],**decor_inter
+                inactive=colors_cappuccino["Subtext0"],
+                **decor_inter,
             ),
             widget.WindowName(
-                background=colors_cappuccino["Crust"],
+                background=colors_cappuccino["Mantle"],
                 foreground=colors_cappuccino["Overlay0"],
                 format="{name}",
                 parse_text=parse_name,
                 width=140,
             ),
-            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
+            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Mantle"]),
             widget.Clock(
-                format=f"   %d %a", fontsize=12, **decor_group
-            ),
-            widget.TextBox(
-                fa.icons["clock"],
-                fontsize=14,
-                padding=5,
-                **decor_group
-            ),
-            widget.Clock(
-                format=f" %H:%M %p   ", fontsize=12, **decor_group
-            ),
-            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-            widget.Systray(background=colors_cappuccino["Crust"]),
-            widget.GenPollText(
+                format=f"   %d %a",
+                fontsize=12,
                 **decor_group,
-                update_interval=1,
-                func=get_kbd_bright,
                 mouse_callbacks={
                     "Button1": lazy.spawn(
-                        (
-                            os.path.expanduser(
-                                "~/.config/qtile/scripts/kbd_bright_control set"
-                            )
-                        )
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 0"))
                     )
                 },
             ),
-            spacer_vert(decor_group),
-            widget.Backlight(
-                fmt="  {}",
-                backlight_name="intel_backlight",
+            widget.TextBox(
+                fa.icons["clock"],
+                fontsize=12,
+                padding=5,
                 **decor_group,
-                mouse_callbacks={"Button1": lazy.spawn("arandr")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 0"))
+                    )
+                },
             ),
-            spacer_vert(decor_group),
-            widget.Volume(
-                fmt="  {}   ",
+            widget.Clock(
+                format=f" %H:%M %p   ",
+                fontsize=12,
                 **decor_group,
-                mouse_callbacks={"Button1": lazy.spawn("pavucontrol")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 0"))
+                    )
+                },
             ),
-            widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
+            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Mantle"]),
+            widget.Systray(background=colors_cappuccino["Mantle"]),
+            widget.Spacer(length=10, background=colors_cappuccino["Mantle"]),
             widget.CPU(
-                 font="Ubuntu Mono Bold",
+                font="Ubuntu Mono Bold",
                 format="  {load_percent:5.1f}%",
                 foreground=colors_cappuccino["Green"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
@@ -156,14 +157,18 @@ def def_bar():
                 **decor_group,
                 foreground=colors_cappuccino["Mauve"],
             ),
-            widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
+            widget.Spacer(length=10, background=colors_cappuccino["Mantle"]),
             widget.CheckUpdates(
                 foreground=colors_gruvbox["red"],
                 distro="Arch_checkupdates",
-                display_format="    {updates}",
+                display_format="    ",
                 colour_have_updates=colors_cappuccino["Red"],
                 colour_no_updates=colors_cappuccino["Green"],
-                mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats yay")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/eww/scripts/popup update 0"))
+                    )
+                },
                 no_update_string="   ",
                 **decor_group,
             ),
@@ -200,9 +205,10 @@ def def_bar():
                 fontsize=16,
                 **decor_group,
             ),
+            widget.Spacer(length=5, background=colors_cappuccino["Mantle"]),
         ],
         36,
-        background=colors_cappuccino["Crust"],
+        background=colors_cappuccino["Mantle"],
         margin=[4, 4, 4, 4],
     )
 
@@ -210,11 +216,13 @@ def def_bar():
 def sec_bar():
     return bar.Bar(
         [
+            widget.Spacer(length=5, background=colors_cappuccino["Mantle"]),
             widget.TextBox(
                 "   ",
                 mouse_callbacks={"Button1": lazy.spawn("rofi -show drun")},
                 fontsize=16,
-                foreground=colors_cappuccino["Sapphire"],**decor_inter
+                foreground=colors_cappuccino["Sapphire"],
+                **decor_inter,
             ),
             spacer_vert(),
             widget.GroupBox(
@@ -223,59 +231,51 @@ def sec_bar():
                 this_current_screen_border=colors_cappuccino["Green"],
                 disable_drag=False,
                 fontsize=14,
-                inactive=colors_cappuccino["Subtext0"],**decor_inter
+                inactive=colors_cappuccino["Subtext0"],
+                **decor_inter,
             ),
             widget.WindowName(
-                background=colors_cappuccino["Crust"],
+                background=colors_cappuccino["Mantle"],
                 foreground=colors_cappuccino["Overlay0"],
                 format="{name}",
                 parse_text=parse_name,
                 width=140,
             ),
-            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-                        widget.Clock(
-                format=f"   %d %a", fontsize=12, **decor_group
-            ),
-            widget.TextBox(
-                fa.icons["clock"],
-                fontsize=14,
-                padding=5,
-                **decor_group
-            ),
+            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Mantle"]),
             widget.Clock(
-                format=f" %H:%M %p   ", fontsize=12, **decor_group
-            ),
-            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Crust"]),
-            widget.GenPollText(
+                format=f"   %d %a",
+                fontsize=12,
                 **decor_group,
-                update_interval=1,
-                func=get_kbd_bright,
                 mouse_callbacks={
                     "Button1": lazy.spawn(
-                        (
-                            os.path.expanduser(
-                                "~/.config/qtile/scripts/kbd_bright_control set"
-                            )
-                        )
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 1"))
                     )
                 },
             ),
-            spacer_vert(decor_group),
-            widget.Backlight(
-                fmt="  {}",
-                backlight_name="intel_backlight",
+            widget.TextBox(
+                fa.icons["clock"],
+                fontsize=12,
+                padding=5,
                 **decor_group,
-                mouse_callbacks={"Button1": lazy.spawn("arandr")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 0"))
+                    )
+                },
             ),
-            spacer_vert(decor_group),
-            widget.Volume(
-                fmt="  {}   ",
+            widget.Clock(
+                format=f" %H:%M %p   ",
+                fontsize=12,
                 **decor_group,
-                mouse_callbacks={"Button1": lazy.spawn("pavucontrol")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(
+                        (os.path.expanduser("~/.config/eww/scripts/popup date 1"))
+                    )
+                },
             ),
-            widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
+            widget.Spacer(length=bar.STRETCH, background=colors_cappuccino["Mantle"]),
             widget.CPU(
-                 font="Ubuntu Mono Bold",
+                font="Ubuntu Mono Bold",
                 format="  {load_percent:5.1f}%",
                 foreground=colors_cappuccino["Green"],
                 mouse_callbacks={"Button1": lazy.spawn("kitty --title k_floats btop")},
@@ -304,20 +304,10 @@ def sec_bar():
                 **decor_group,
                 foreground=colors_cappuccino["Mauve"],
             ),
-            widget.Spacer(length=10, background=colors_cappuccino["Crust"]),
-            widget.Spacer(length=10, background=colors_cappuccino["Crust"],**decor_group ),
-            widget.GenPollText(
-                **decor_group,
-                padding=5,
-                update_interval=1,
-                func=decode_profile,
-                mouse_callbacks={
-                    "Button1": lazy.spawn(
-                        (os.path.expanduser("~/.config/qtile/scripts/profile_perf set"))
-                    )
-                },
+            widget.Spacer(length=10, background=colors_cappuccino["Mantle"]),
+            widget.Spacer(
+                length=10, background=colors_cappuccino["Mantle"], **decor_group
             ),
-            spacer_vert(decor_group),
             widget.Battery(
                 **decor_group,
                 charge_char="󰂄",
@@ -331,15 +321,16 @@ def sec_bar():
                 fmt="⏻  ",
                 mouse_callbacks={
                     "Button1": lazy.spawn(
-                        (os.path.expanduser("~/.config/eww/scripts/popup menu 0"))
+                        (os.path.expanduser("~/.config/eww/scripts/popup menu 1"))
                     )
                 },
                 foreground=colors_cappuccino["Teal"],
                 fontsize=16,
                 **decor_group,
             ),
+            widget.Spacer(length=5, background=colors_cappuccino["Mantle"]),
         ],
         36,
-        background=colors_cappuccino["Crust"],
+        background=colors_cappuccino["Mantle"],
         margin=[4, 4, 4, 4],
     )

@@ -29,7 +29,7 @@ groups = [
     Group(
         "8",
         label=fa.icons["spotify"],
-        spawn="spotify-launcher",
+        spawn="spotify",
         matches=[Match(wm_class="spotify")],
     ),
 ]

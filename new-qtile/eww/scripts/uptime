@@ -1,5 +1,5 @@
 #!/bin/bash
 
-uptime_output=$(uptime -p)
+uptime_output=$(uptime -p | sed 's/up //')
 
 echo $uptime_output

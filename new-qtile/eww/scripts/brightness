@@ -1,17 +1,10 @@
-DIR="$HOME/.config/bspwm/assets"
-BRIGHTNESS_STEPS=5
+#!/bin/bash
 
-function get_brightness {
-  brightnessctl i | grep -oP '\(\K[^%\)]+'
-}
-
-case $1 in
-  up)
-    # increase the backlight by 5%
-    brightnessctl set "${BRIGHTNESS_STEPS:-5}%+" -q
-    ;;
-  down)
-    # decrease the backlight by 5%
-    brightnessctl set "${BRIGHTNESS_STEPS:-5}%-" -q
-    ;;
-esac
+if [ "$1" == "monitor" ]; then
+    brightnessctl i | grep -oP '\(\K[^%\)]+'
+elif [ "$1" == "kbd" ]; then
+    brightnessctl --device='asus::kbd_backlight' g
+else
+    echo "Invalid input. Please provide 'monitor' or 'kbd'."
+    exit 1
+fi

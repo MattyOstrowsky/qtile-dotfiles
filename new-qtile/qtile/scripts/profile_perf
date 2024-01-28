@@ -22,9 +22,10 @@ set_level() {
 
         echo "Setting profile to $new_profile"
         powerprofilesctl set "$new_profile"
-        exit
+        exit 0
     else
         echo "$profile"
+        exit 0
     fi
 }
 

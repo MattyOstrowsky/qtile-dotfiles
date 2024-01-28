@@ -31,6 +31,6 @@ updates() {
 [ "$1" = "aur" ] && aur && exit
 [ "$1" = "repo" ] && repo && exit
 [ "$1" = "sum" ] && sum && exit
-[ "$1" = "aurrun" ] && kitty --title kitty_floats yay -Su --aur && exit
-[ "$1" = "reporun" ] && kitty --title kitty_floats yay -Su --repo && exit
-[ "$1" = "sumrun" ] && kitty --title kitty_floats yay -Su  && exit
+[ "$1" = "aurrun" ] && kitty --title k_floats yay -Su --aur && exit
+[ "$1" = "reporun" ] && kitty --title k_floats yay -Su --repo && exit
+[ "$1" = "sumrun" ] && kitty --title k_floats yay -Su  && exit

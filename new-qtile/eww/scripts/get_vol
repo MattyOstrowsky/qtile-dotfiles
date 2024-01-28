@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source_device=$1
+
+get_volume() {
+    local device=$1
+    amixer -D pulse sget "$device" | awk -F '[^0-9]+' '/Left:/{print $3}'
+}
+
+if [ "$source_device" == "master" ]; then
+    get_volume "Master"
+elif [ "$source_device" == "capture" ]; then
+    get_volume "Capture"
+else
+    echo "Invalid input. Please provide 'master' or 'capture'."
+    exit 1
+fi

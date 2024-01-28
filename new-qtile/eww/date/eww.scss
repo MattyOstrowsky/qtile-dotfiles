@@ -35,7 +35,7 @@
     border-radius: 10px;
     padding: 0 1rem .2rem;
     color: $Text;
-    background-color: $Surface0;
+    background-color: $Base;
     margin: 0px 12px 12px 12px;
   
     .cal {
@@ -54,7 +54,7 @@
   }
   
   calendar {
-    color: $Subtext0;
+    color: $Text;
     font-weight:500;
   }
   calendar:selected {
@@ -74,7 +74,7 @@
   }
   
   calendar:indeterminate {
-    color: $Mantle;
+    color: $Surface1;
   }
 
   

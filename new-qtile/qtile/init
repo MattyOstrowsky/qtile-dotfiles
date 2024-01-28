@@ -8,5 +8,5 @@ eww daemon --config "$HOME/.config/eww/menu" &
 nm-applet &
 blueman-applet & 
 optimus-manager-qt &
-rclone mount mygoogledrive: ~/drive/ &
+rclone mount google: ~/Documents/drive/ &
 exit

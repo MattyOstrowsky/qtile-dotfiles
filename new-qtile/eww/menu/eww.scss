@@ -16,8 +16,8 @@
 }
 .power-container {
     padding: 5px;
-    background-color: $Surface0;
-    border-color: $Surface0;
+    background-color: $Base;
+    border-color: $Base;
     border-radius: 10px;
     border-width: 2px;
     border-style: solid;
@@ -42,47 +42,72 @@
 
 .profile {
     padding: 15px;
-    background-color: $Surface0;
-    border-color: $Surface0;
-    border-radius: 10px;
+    background-color: $Base;
+    border-color: $Base;
+    border-radius: 20px;
     border-width: 2px;
     border-style: solid;
+    margin-bottom: 30px;
 }
 .face {
 	background-repeat: no-repeat;
     background-size: 50px 50px;
     background-position: center;
-	min-height: 50px;
-	min-width: 50px;
-    border-color: $Green;
+	min-height: 60px;
+	min-width: 60px;
     border-radius: 30px;
-    border-width: 2px;
+    border-width: 0px;
     border-style: solid;
-    background-color:$Sky;
+    background-color:$Surface0;
+    opacity: 0.7;
 }
 
 .user-lb{
     font-size: x-large;
     font-weight: 800;
-    color: $Sapphire;
+    color: $Rosewater;
     padding: 0px 20px;
 }
 
 .uptime-lb {
     font-size:xx-small;
     font-weight: 800;
-    color: $Teal;
+    color: $Subtext0;
+    font-style: italic;
 }
 
-.progress {
-font-size: 1.1rem;
-min-height: 50px;
-min-width: 50px;
-background-color: $Surface0;
-border-radius: 10px;
-border-width: 2px;
-border-style: solid;
-border-color: $Surface0;
-margin: 10px;
-padding: 10px;
-}
+.sidestuff slider {
+    all: unset;
+    color: #ffd5cd;
+  }
+  
+
+  .label {
+    color: $Text;
+  }
+  .metric {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .control-container {
+    font-size:large;
+    font-weight: 700;
+    background-color: $Base;
+    border-radius: 20px;
+    margin: 0px 20px;
+    padding: 5px 0px;
+  }
+  .metric scale trough highlight {
+    all: unset;
+    background: linear-gradient(90deg, $Blue 0%, $Green 100%);
+    border-radius: 10px;
+  }
+  .metric scale trough {
+    all: unset;
+    background: $Mantle;
+    border-radius: 50px;
+    min-height: 15px;
+    min-width: 300px;
+    margin-left: 0px;
+    margin-right: 10px;
+  }
