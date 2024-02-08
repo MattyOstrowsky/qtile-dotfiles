@@ -12,3 +12,6 @@ source $ZSH/oh-my-zsh.sh
 eval "$(starship init zsh)"
 
 neofetch
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform

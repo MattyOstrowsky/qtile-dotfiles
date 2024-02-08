@@ -5,6 +5,7 @@ return {
       "go",
       "bash",
       "html",
+      "terraform",
       "javascript",
       "json",
       "lua",

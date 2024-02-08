@@ -16,20 +16,18 @@ groups = [
         spawn="google-chrome-stable",
         matches=[Match(wm_class="google-chrome")],
     ),
-    Group("3", label=fa.icons["terminal"]),
-    Group("4", label=fa.icons["code"], spawn="code"),
+    Group("3", label=fa.icons["terminal"], spawn="kitty"),
+    Group("4", label=fa.icons["code"]),
     Group("5", label=fa.icons["cog"]),
     Group("6", label=fa.icons["folder"]),
     Group(
         "7",
         label=fa.icons["comments"],
-        spawn="discord",
         matches=[Match(wm_class="discord")],
     ),
     Group(
         "8",
         label=fa.icons["spotify"],
-        spawn="spotify",
         matches=[Match(wm_class="spotify")],
     ),
 ]
@@ -114,8 +112,8 @@ floating_layout = layout.Floating(
         Match(wm_class="gnome-disks"),  # Gnome Disk Utility
         Match(wm_class="arandr"),
         Match(wm_class="pavucontrol"),
-        Match(wm_class="yad"),# YAD
-        Match(title="k_floats")  # kitty
+        Match(wm_class="yad"),  # YAD
+        Match(title="k_floats"),  # kitty
     ],
     border_focus=colors_cappuccino["Blue"],
     border_width=2,
