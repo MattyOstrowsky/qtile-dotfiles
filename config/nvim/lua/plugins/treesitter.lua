@@ -12,6 +12,10 @@ return {
       "python",
       "vim",
       "yaml",
+      "regex",
+      "markdown",
+      "markdown_inline",
+      "jsonc",
     },
   },
 }
